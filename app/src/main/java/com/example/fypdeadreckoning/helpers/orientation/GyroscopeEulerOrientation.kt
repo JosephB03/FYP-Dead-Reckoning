@@ -1,5 +1,6 @@
-package com.example.fypdeadreckoning.helpers
+package com.example.fypdeadreckoning.helpers.orientation
 
+import com.example.fypdeadreckoning.helpers.extra.ExtraFunctions
 import kotlin.math.atan2
 import kotlin.math.pow
 

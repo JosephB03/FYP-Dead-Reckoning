@@ -1,4 +1,4 @@
-package com.example.fypdeadreckoning.helpers
+package com.example.fypdeadreckoning.helpers.extra
 
 import org.ejml.data.DMatrixRMaj
 import kotlin.math.sqrt

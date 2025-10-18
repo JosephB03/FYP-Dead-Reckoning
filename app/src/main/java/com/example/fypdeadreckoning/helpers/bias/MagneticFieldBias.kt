@@ -1,5 +1,6 @@
-package com.example.fypdeadreckoning.helpers
+package com.example.fypdeadreckoning.helpers.bias
 
+import com.example.fypdeadreckoning.helpers.extra.ExtraFunctions
 import org.ejml.dense.row.CommonOps_DDRM
 import org.ejml.simple.SimpleMatrix
 import kotlin.math.pow

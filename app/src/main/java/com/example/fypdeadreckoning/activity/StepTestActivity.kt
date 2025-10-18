@@ -1,4 +1,4 @@
-package com.example.fypdeadreckoning
+package com.example.fypdeadreckoning.activity
 
 import android.Manifest
 import android.app.Activity
@@ -14,8 +14,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.example.fypdeadreckoning.helpers.DynamicStepCounter
-import com.example.fypdeadreckoning.helpers.ExtraFunctions
+import com.example.fypdeadreckoning.R
+import com.example.fypdeadreckoning.helpers.steps.DynamicStepCounter
+import com.example.fypdeadreckoning.helpers.extra.ExtraFunctions
 
 class StepTestActivity : Activity(), SensorEventListener {
 

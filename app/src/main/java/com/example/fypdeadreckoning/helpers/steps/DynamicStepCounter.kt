@@ -1,4 +1,4 @@
-package com.example.fypdeadreckoning.helpers
+package com.example.fypdeadreckoning.helpers.steps
 
 class DynamicStepCounter() {
 

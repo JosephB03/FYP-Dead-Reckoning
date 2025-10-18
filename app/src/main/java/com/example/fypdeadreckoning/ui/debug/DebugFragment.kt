@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.fypdeadreckoning.DirectionTestActivity
-import com.example.fypdeadreckoning.StepTestActivity
+import com.example.fypdeadreckoning.activity.DirectionTestActivity
+import com.example.fypdeadreckoning.activity.StepTestActivity
 import com.example.fypdeadreckoning.databinding.FragmentDebugBinding
 
 class DebugFragment : Fragment() {

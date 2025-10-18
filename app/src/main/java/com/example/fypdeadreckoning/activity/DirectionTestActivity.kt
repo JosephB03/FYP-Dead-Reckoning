@@ -1,4 +1,4 @@
-package com.example.fypdeadreckoning
+package com.example.fypdeadreckoning.activity
 
 import android.app.Activity
 import android.hardware.Sensor
@@ -9,11 +9,12 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
-import com.example.fypdeadreckoning.helpers.ExtraFunctions
-import com.example.fypdeadreckoning.helpers.GyroscopeBias
-import com.example.fypdeadreckoning.helpers.GyroscopeDeltaOrientation
-import com.example.fypdeadreckoning.helpers.GyroscopeEulerOrientation
-import com.example.fypdeadreckoning.helpers.MagneticFieldOrientation
+import com.example.fypdeadreckoning.R
+import com.example.fypdeadreckoning.helpers.extra.ExtraFunctions
+import com.example.fypdeadreckoning.helpers.bias.GyroscopeBias
+import com.example.fypdeadreckoning.helpers.orientation.GyroscopeDeltaOrientation
+import com.example.fypdeadreckoning.helpers.orientation.GyroscopeEulerOrientation
+import com.example.fypdeadreckoning.helpers.orientation.MagneticFieldOrientation
 
 class DirectionTestActivity : Activity(), SensorEventListener {
     private val PERMISSION_REQUEST_CODE = 101
