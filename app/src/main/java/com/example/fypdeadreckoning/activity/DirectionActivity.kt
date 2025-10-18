@@ -16,7 +16,7 @@ import com.example.fypdeadreckoning.helpers.orientation.GyroscopeDeltaOrientatio
 import com.example.fypdeadreckoning.helpers.orientation.GyroscopeEulerOrientation
 import com.example.fypdeadreckoning.helpers.orientation.MagneticFieldOrientation
 
-class DirectionTestActivity : Activity(), SensorEventListener {
+class DirectionActivity : Activity(), SensorEventListener {
     private val PERMISSION_REQUEST_CODE = 101
     val EULER_GYROSCOPE_SENSITIVITY: Float = 0.0025f
     val GYROSCOPE_SENSITIVITY: Float = 0f
@@ -114,22 +114,22 @@ class DirectionTestActivity : Activity(), SensorEventListener {
 
         startButton!!.setOnClickListener {
             sensorManager!!.registerListener(
-                this@DirectionTestActivity,
+                this@DirectionActivity,
                 sensorGyroU,
                 SensorManager.SENSOR_DELAY_FASTEST
             )
             sensorManager!!.registerListener(
-                this@DirectionTestActivity,
+                this@DirectionActivity,
                 sensorGyroC,
                 SensorManager.SENSOR_DELAY_FASTEST
             )
             sensorManager!!.registerListener(
-                this@DirectionTestActivity,
+                this@DirectionActivity,
                 sensorMagU,
                 SensorManager.SENSOR_DELAY_FASTEST
             )
             sensorManager!!.registerListener(
-                this@DirectionTestActivity,
+                this@DirectionActivity,
                 sensorGravity,
                 SensorManager.SENSOR_DELAY_FASTEST
             )
@@ -155,10 +155,10 @@ class DirectionTestActivity : Activity(), SensorEventListener {
 
         // Deactivates the sensors
         stopButton!!.setOnClickListener {
-            sensorManager!!.unregisterListener(this@DirectionTestActivity, sensorGravity)
-            sensorManager!!.unregisterListener(this@DirectionTestActivity, sensorMagU)
-            sensorManager!!.unregisterListener(this@DirectionTestActivity, sensorGyroC)
-            sensorManager!!.unregisterListener(this@DirectionTestActivity, sensorGyroU)
+            sensorManager!!.unregisterListener(this@DirectionActivity, sensorGravity)
+            sensorManager!!.unregisterListener(this@DirectionActivity, sensorMagU)
+            sensorManager!!.unregisterListener(this@DirectionActivity, sensorGyroC)
+            sensorManager!!.unregisterListener(this@DirectionActivity, sensorGyroU)
             startButton!!.isEnabled = true
             stopButton!!.isEnabled = false
 
@@ -175,22 +175,22 @@ class DirectionTestActivity : Activity(), SensorEventListener {
         super.onResume()
         if (isRunning) {
             sensorManager!!.registerListener(
-                this@DirectionTestActivity,
+                this@DirectionActivity,
                 sensorGyroU,
                 SensorManager.SENSOR_DELAY_FASTEST
             )
             sensorManager!!.registerListener(
-                this@DirectionTestActivity,
+                this@DirectionActivity,
                 sensorGyroC,
                 SensorManager.SENSOR_DELAY_FASTEST
             )
             sensorManager!!.registerListener(
-                this@DirectionTestActivity,
+                this@DirectionActivity,
                 sensorMagU,
                 SensorManager.SENSOR_DELAY_FASTEST
             )
             sensorManager!!.registerListener(
-                this@DirectionTestActivity,
+                this@DirectionActivity,
                 sensorGravity,
                 SensorManager.SENSOR_DELAY_FASTEST
             )

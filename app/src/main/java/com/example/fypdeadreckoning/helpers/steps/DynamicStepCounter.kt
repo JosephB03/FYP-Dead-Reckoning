@@ -29,6 +29,8 @@ class DynamicStepCounter() {
         avgAcc = 0.0
         sumAcc = avgAcc
         runCount = 0
+
+        sensitivity = 0.5
     }
 
     // Set the default values for sensitivity

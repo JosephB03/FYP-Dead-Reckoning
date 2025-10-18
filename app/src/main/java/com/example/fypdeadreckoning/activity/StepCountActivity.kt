@@ -18,7 +18,7 @@ import com.example.fypdeadreckoning.R
 import com.example.fypdeadreckoning.helpers.steps.DynamicStepCounter
 import com.example.fypdeadreckoning.helpers.extra.ExtraFunctions
 
-class StepTestActivity : Activity(), SensorEventListener {
+class StepCountActivity : Activity(), SensorEventListener {
 
     private val PERMISSION_REQUEST_CODE = 101
 
@@ -100,9 +100,9 @@ class StepTestActivity : Activity(), SensorEventListener {
 
         // Deactivates the sensors
         stopButton!!.setOnClickListener {
-            sensorManager!!.unregisterListener(this@StepTestActivity, sensorAccelerometer)
-            sensorManager!!.unregisterListener(this@StepTestActivity, sensorLinearAcceleration)
-            sensorManager!!.unregisterListener(this@StepTestActivity, sensorStepDetector)
+            sensorManager!!.unregisterListener(this@StepCountActivity, sensorAccelerometer)
+            sensorManager!!.unregisterListener(this@StepCountActivity, sensorLinearAcceleration)
+            sensorManager!!.unregisterListener(this@StepCountActivity, sensorStepDetector)
 
             startButton!!.isEnabled = true
             stopButton!!.isEnabled = false
@@ -168,12 +168,12 @@ class StepTestActivity : Activity(), SensorEventListener {
 
         if (wasRunning) {
             sensorManager!!.registerListener(
-                this@StepTestActivity,
+                this@StepCountActivity,
                 sensorAccelerometer,
                 SensorManager.SENSOR_DELAY_FASTEST
             )
             sensorManager!!.registerListener(
-                this@StepTestActivity,
+                this@StepCountActivity,
                 sensorStepDetector,
                 SensorManager.SENSOR_DELAY_FASTEST
             )
@@ -233,22 +233,22 @@ class StepTestActivity : Activity(), SensorEventListener {
     // Registers listeners on start
     private fun startSensorListeners() {
         sensorManager!!.registerListener(
-            this@StepTestActivity,
+            this@StepCountActivity,
             sensorAccelerometer,
             SensorManager.SENSOR_DELAY_FASTEST
         )
         sensorManager!!.registerListener(
-            this@StepTestActivity,
+            this@StepCountActivity,
             sensorLinearAcceleration,
             SensorManager.SENSOR_DELAY_FASTEST
         )
         sensorManager!!.registerListener(
-            this@StepTestActivity,
+            this@StepCountActivity,
             sensorStepDetector,
             SensorManager.SENSOR_DELAY_FASTEST
         )
         sensorManager!!.registerListener(
-            this@StepTestActivity,
+            this@StepCountActivity,
             sensorStepCounter,
             SensorManager.SENSOR_DELAY_FASTEST
         )
