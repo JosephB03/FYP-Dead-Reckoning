@@ -12,10 +12,10 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.example.fypdeadreckoning.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/navigation_debug"
+        android:name="com.example.fypdeadreckoning.ui.debug.DebugFragment"
+        android:label="@string/title_debug"
+        tools:layout="@layout/fragment_debug" />
 
     <fragment
         android:id="@+id/navigation_settings"
