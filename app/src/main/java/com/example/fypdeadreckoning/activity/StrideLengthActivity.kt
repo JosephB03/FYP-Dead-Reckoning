@@ -137,17 +137,15 @@ class StrideLengthActivity : AppCompatActivity(), SensorEventListener, OnPreferr
         // TODO: Add clear functionality
         buttonSetStrideLength!!.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View?) {
-                val strideLength: Double
-                if (stepCount != 0) {
-                    strideLength = inputDistance!!.text.toString().toInt()
-                        .toDouble() / stepCount
-                    Log.d(TAG, "Steps taken:: $stepCount")
-                    Log.d(TAG, "Stride length: $strideLength")
-                } else {
+                if (stepCount <= 0) {
                     Toast.makeText(application, "Take a few steps first!", Toast.LENGTH_SHORT)
                         .show()
                     return
                 }
+                val strideLength: Double = inputDistance!!.text.toString().toInt()
+                    .toDouble() / stepCount
+                Log.d(TAG, "Steps taken:: $stepCount")
+                Log.d(TAG, "Stride length: $strideLength")
 
                 val strideLengthStr = kotlin.String.format(Locale.UK, "%.2f", strideLength)
                 Toast.makeText(
@@ -156,7 +154,7 @@ class StrideLengthActivity : AppCompatActivity(), SensorEventListener, OnPreferr
                     Toast.LENGTH_SHORT
                 ).show()
 
-                //returns the stride_length and preferred_step_counter info to the calling activity
+                // returns the stride_length and preferred_step_counter info to the calling activity
                 val myIntent = intent
                 myIntent.putExtra("stride_length", strideLength)
                 myIntent.putExtra(

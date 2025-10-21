@@ -102,13 +102,6 @@ object ExtraFunctions {
         return sqrt(sumSq)
     }
 
-    //    public static float polarShiftMinusHalfPI(double heading) {
-    //        if (heading < -Math.PI / 2.0 && heading > -Math.PI)
-    //            heading += 3 * Math.PI / 2.0;
-    //        else
-    //            heading -= Math.PI / 2.0;
-    //        return (float)heading;
-    //    }
     fun radsToDegrees(rads: Double): Float {
         var degrees = if (rads < 0) (2.0 * Math.PI + rads) else rads
         degrees *= (180.0 / Math.PI)
@@ -121,7 +114,7 @@ object ExtraFunctions {
         //convert 0 < h < 2pi or -2pi < h < 0 to -pi/2 < h < pi/2
         return if (currHeading < -Math.PI) ((currHeading % Math.PI) + Math.PI).toFloat()
         else if (currHeading > Math.PI) ((currHeading % Math.PI) + -Math.PI).toFloat()
-        else currHeading.toFloat()
+        else currHeading
     }
 
     fun calcCompassDirection(magneticDirection: Float, gyroDirection: Float): Float {
