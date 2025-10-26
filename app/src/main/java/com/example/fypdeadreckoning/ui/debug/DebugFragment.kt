@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.fypdeadreckoning.activity.DirectionActivity
 import com.example.fypdeadreckoning.activity.StepCountActivity
-import com.example.fypdeadreckoning.activity.StrideLengthActivity
+import com.example.fypdeadreckoning.activity.StrideLengthCalibrationActivity
 import com.example.fypdeadreckoning.databinding.FragmentDebugBinding
 
 class DebugFragment : Fragment() {
@@ -53,7 +53,7 @@ class DebugFragment : Fragment() {
         }
 
         binding.strideDebugButton.setOnClickListener {
-            val intent = Intent(requireContext(), StrideLengthActivity::class.java)
+            val intent = Intent(requireContext(), StrideLengthCalibrationActivity::class.java)
             startActivity(intent)
         }
     }

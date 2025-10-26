@@ -42,9 +42,20 @@
             android:exported="true">
         </activity>
         <activity
-            android:name=".activity.StrideLengthActivity"
+            android:name=".activity.StrideLengthCalibrationActivity"
             android:exported="true">
         </activity>
+        <activity
+            android:name=".activity.MagneticCompassCalibrationActivity"
+            android:label="Compass Calibration"
+            android:theme="@style/Theme.AppCompat"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.GyroscopeCalibrationActivity"
+            android:label="Gyroscope Calibration"
+            android:theme="@style/Theme.AppCompat"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

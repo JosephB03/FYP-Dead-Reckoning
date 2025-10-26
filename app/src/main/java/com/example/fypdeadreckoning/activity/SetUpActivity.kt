@@ -1,6 +1,5 @@
 package com.example.fypdeadreckoning.activity
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -23,14 +22,16 @@ class SetUpActivity: AppCompatActivity() {
 
     private var beginText: TextView? = null
     private var strideButton: Button? = null
+    private var magButton: Button? = null
+    private var gyroButton: Button? = null
     private var beginButton: Button? = null
 
     private val strideLengthLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == RESULT_OK) {
             result.data?.let { data ->
-                val strideLength = data.getDoubleExtra("stride_length", 0.0)
-                val preferredSensitivity = data.getDoubleExtra("preferred_sensitivity", 0.0)
+                val strideLength = data.getDoubleExtra("stride_length", 0.75) // average stride length for a person
+                val preferredSensitivity = data.getDoubleExtra("preferred_sensitivity", 2.5) // best sensitivity in my testing
 
                 Log.d(TAG, "Stride length: $strideLength")
                 Log.d(TAG, "Preferred step sensitivity: $preferredSensitivity")
@@ -48,9 +49,9 @@ class SetUpActivity: AppCompatActivity() {
                 val magBiasY = data.getDoubleExtra("mag_bias_y", 0.0)
                 val magBiasZ = data.getDoubleExtra("mag_bias_z", 0.0)
 
-               Log.d(TAG, "Mag X: $magBiasX")
-               Log.d(TAG, "Mag Y: $magBiasY")
-               Log.d(TAG, "Mag Z: $magBiasZ")
+                Log.d(TAG, "Mag X: $magBiasX")
+                Log.d(TAG, "Mag Y: $magBiasY")
+                Log.d(TAG, "Mag Z: $magBiasZ")
 
                 saveCompassCalibration(magBiasX, magBiasY, magBiasZ)
             }
@@ -81,12 +82,26 @@ class SetUpActivity: AppCompatActivity() {
 
         beginText = findViewById<View?>(R.id.beginText) as TextView
         strideButton = findViewById<View?>(R.id.strideButton) as Button
+        magButton = findViewById<View?>(R.id.magButton) as Button
+        gyroButton = findViewById<View?>(R.id.gyroButton) as Button
         beginButton = findViewById<View?>(R.id.beginButton) as Button
 
         strideButton!!.setOnClickListener {
             Log.d(TAG, "Stride calibration button pressed.")
-            val intent = Intent(this@SetUpActivity, StrideLengthActivity::class.java)
+            val intent = Intent(this@SetUpActivity, StrideLengthCalibrationActivity::class.java)
             strideLengthLauncher.launch(intent)
+        }
+
+        magButton!!.setOnClickListener {
+            Log.d(TAG, "Magnetic compass calibration button pressed.")
+            val intent = Intent(this@SetUpActivity, MagneticCompassCalibrationActivity::class.java)
+            magneticCompassLauncher.launch(intent)
+        }
+
+        gyroButton!!.setOnClickListener {
+            Log.d(TAG, "Gyroscope calibration button pressed.")
+            val intent = Intent(this@SetUpActivity, GyroscopeCalibrationActivity::class.java)
+            gyroscopeLauncher.launch(intent)
         }
 
         beginButton!!.setOnClickListener {
@@ -102,7 +117,7 @@ class SetUpActivity: AppCompatActivity() {
 
                 // Check if all are calibrated
                 if (strideLength == -1.0 || sensitivity == -1.0) {
-                        Toast.makeText(this@SetUpActivity, "Please calibrate all sensors", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@SetUpActivity, "Please calibrate primary sensors", Toast.LENGTH_SHORT).show()
                 } else {
                     // All calibrated - proceed to main activity
                     val intent = Intent(this@SetUpActivity, MainActivity::class.java)

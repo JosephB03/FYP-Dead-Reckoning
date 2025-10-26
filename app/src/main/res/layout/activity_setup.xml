@@ -16,7 +16,6 @@
         app:cardCornerRadius="30dp"
         app:cardElevation="20dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:background="?attr/colorPrimary">
@@ -54,6 +53,49 @@
         app:layout_constraintTop_toBottomOf="@id/beginCard"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/advancedHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Advanced Calibration (Optional)"
+        android:textSize="24sp"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        android:textColor="?attr/colorOnPrimary"
+        app:layout_constraintTop_toBottomOf="@id/strideButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <Button
+        android:id="@+id/magButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingVertical="10dp"
+        android:paddingHorizontal="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="50dp"
+        android:textColor="?attr/colorOnPrimary"
+        android:backgroundTint="?attr/colorAccent"
+        android:text="Calibrate Compass"
+        app:layout_constraintTop_toBottomOf="@id/advancedHeader"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/gyroButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingVertical="10dp"
+        android:paddingHorizontal="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="50dp"
+        android:textColor="?attr/colorOnPrimary"
+        android:backgroundTint="?attr/colorAccent"
+        android:text="Calibrate Gyroscope"
+        app:layout_constraintTop_toBottomOf="@id/magButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
     <Button
         android:id="@+id/beginButton"
         android:layout_width="wrap_content"
@@ -65,7 +107,7 @@
         android:textColor="?attr/colorOnPrimary"
         android:backgroundTint="?attr/colorAccent"
         android:text="@string/begin"
-        app:layout_constraintTop_toBottomOf="@id/strideButton"
+        app:layout_constraintTop_toBottomOf="@id/gyroButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

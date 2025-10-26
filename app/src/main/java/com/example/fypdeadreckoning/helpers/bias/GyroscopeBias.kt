@@ -7,7 +7,6 @@ class GyroscopeBias {
 
      init {
         runCount = 0
-        trials = 0
         gyroBias = FloatArray(3)
     }
 

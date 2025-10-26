@@ -1,5 +1,6 @@
 package com.example.fypdeadreckoning.activity
 
+import android.annotation.SuppressLint
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -23,11 +24,10 @@ import kotlin.Array
 import kotlin.Double
 import kotlin.Float
 import kotlin.Int
-import kotlin.arrayOf
 import kotlin.arrayOfNulls
 import kotlin.text.format
 
-class StrideLengthActivity : AppCompatActivity(), SensorEventListener, OnPreferredStepCounterListener {
+class StrideLengthCalibrationActivity : AppCompatActivity(), SensorEventListener, OnPreferredStepCounterListener {
     private var TAG = "StrideLengthActivity"
 
     private var textAndroidSteps: TextView? = null
@@ -42,7 +42,7 @@ class StrideLengthActivity : AppCompatActivity(), SensorEventListener, OnPreferr
     private var androidStepCounter: Sensor? = null
     private var sensorManager: SensorManager? = null
 
-    private lateinit var dynamicStepCounters: Array<DynamicStepCounter>
+    private var dynamicStepCounters: Array<DynamicStepCounter> = Array(15) { DynamicStepCounter() }
 
     // Step counter variables
     private var androidStepCount = 0
@@ -53,19 +53,12 @@ class StrideLengthActivity : AppCompatActivity(), SensorEventListener, OnPreferr
 
     private var wasRunning = false
 
+    @SuppressLint("UnsafeIntentLaunch")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_stride_calibration)
 
-        dynamicStepCounters = arrayOf(
-            DynamicStepCounter(),
-            DynamicStepCounter(),
-            DynamicStepCounter(),
-            DynamicStepCounter(),
-            DynamicStepCounter()
-        )
-
-        var sensitivity = 0.5
+        var sensitivity = 2.00
         for (i in dynamicStepCounters.indices) {
             dynamicStepCounters[i] = DynamicStepCounter(sensitivity)
             sensitivity += 0.05
@@ -88,12 +81,12 @@ class StrideLengthActivity : AppCompatActivity(), SensorEventListener, OnPreferr
         //activate sensors when start button is pressed
         buttonStartCalibration!!.setOnClickListener {
             sensorManager!!.registerListener(
-                this@StrideLengthActivity,
+                this@StrideLengthCalibrationActivity,
                 linearAcceleration,
                 SensorManager.SENSOR_DELAY_FASTEST
             )
             sensorManager!!.registerListener(
-                this@StrideLengthActivity,
+                this@StrideLengthCalibrationActivity,
                 androidStepCounter,
                 SensorManager.SENSOR_DELAY_FASTEST
             )
@@ -107,7 +100,7 @@ class StrideLengthActivity : AppCompatActivity(), SensorEventListener, OnPreferr
 
         //deactivate sensors when stop button is pressed and open step_counters dialog
         buttonStopCalibration!!.setOnClickListener {
-            sensorManager!!.unregisterListener(this@StrideLengthActivity)
+            sensorManager!!.unregisterListener(this@StrideLengthCalibrationActivity)
 
             val stepCounts = arrayOfNulls<String>(dynamicStepCounters.size)
             for (i in stepCounts.indices) stepCounts[i] = String.format(
@@ -120,7 +113,7 @@ class StrideLengthActivity : AppCompatActivity(), SensorEventListener, OnPreferr
 
             //creating dialog, setting the stepCounts list, and setting a handler
             val stepCalibrationDialogFragment = StepCalibrationDialogFragment()
-            stepCalibrationDialogFragment.setOnPreferredStepCounterListener(this@StrideLengthActivity)
+            stepCalibrationDialogFragment.setOnPreferredStepCounterListener(this@StrideLengthCalibrationActivity)
             stepCalibrationDialogFragment.setStepList(stepCounts)
             stepCalibrationDialogFragment.show(supportFragmentManager, "step_counters")
 
@@ -133,38 +126,33 @@ class StrideLengthActivity : AppCompatActivity(), SensorEventListener, OnPreferr
 
         //when the button is pressed, determine the strideLength by dividing stepsTaken
         //by distanceTraveled, and stored stride length in StepCountActivity
-        // TODO: Come up with a default stride length
-        // TODO: Add clear functionality
-        buttonSetStrideLength!!.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(v: View?) {
-                if (stepCount <= 0) {
-                    Toast.makeText(application, "Take a few steps first!", Toast.LENGTH_SHORT)
-                        .show()
-                    return
-                }
-                val strideLength: Double = inputDistance!!.text.toString().toInt()
-                    .toDouble() / stepCount
-                Log.d(TAG, "Steps taken:: $stepCount")
-                Log.d(TAG, "Stride length: $strideLength")
-
-                val strideLengthStr = kotlin.String.format(Locale.UK, "%.2f", strideLength)
-                Toast.makeText(
-                    applicationContext,
-                    "Stride length set: $strideLengthStr m/step",
-                    Toast.LENGTH_SHORT
-                ).show()
-
-                // returns the stride_length and preferred_step_counter info to the calling activity
-                val myIntent = intent
-                myIntent.putExtra("stride_length", strideLength)
-                myIntent.putExtra(
-                    "preferred_step_counter",
-                    dynamicStepCounters[preferredStepCounterIndex].sensitivity
-                )
-                setResult(RESULT_OK, myIntent)
-                finish()
+        // TODO: Add a clear functionality
+        buttonSetStrideLength!!.setOnClickListener {
+            if (stepCount <= 0) {
+                Toast.makeText(application, "Take a few steps first!", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
-        })
+            val strideLength: Double = inputDistance!!.text.toString().toInt().toDouble() / stepCount
+            Log.d(TAG, "Steps taken:: $stepCount")
+            Log.d(TAG, "Stride length: $strideLength")
+
+            val strideLengthStr = kotlin.String.format(Locale.UK, "%.2f", strideLength)
+            Toast.makeText(
+                applicationContext,
+                "Stride length set: $strideLengthStr m/step",
+                Toast.LENGTH_SHORT
+            ).show()
+
+            // Returns the stride_length and preferred_step_counter info to the calling activity
+            val myIntent = intent
+            myIntent.putExtra("stride_length", strideLength)
+            myIntent.putExtra(
+                "preferred_step_counter",
+                dynamicStepCounters[preferredStepCounterIndex].sensitivity
+            )
+            setResult(RESULT_OK, myIntent)
+            finish()
+        }
     }
 
     override fun onStop() {
@@ -177,12 +165,12 @@ class StrideLengthActivity : AppCompatActivity(), SensorEventListener, OnPreferr
 
         if (wasRunning) {
             sensorManager!!.registerListener(
-                this@StrideLengthActivity,
+                this@StrideLengthCalibrationActivity,
                 linearAcceleration,
                 SensorManager.SENSOR_DELAY_FASTEST
             )
             sensorManager!!.registerListener(
-                this@StrideLengthActivity,
+                this@StrideLengthCalibrationActivity,
                 androidStepCounter,
                 SensorManager.SENSOR_DELAY_FASTEST
             )
@@ -210,8 +198,8 @@ class StrideLengthActivity : AppCompatActivity(), SensorEventListener, OnPreferr
             textAndroidSteps!!.text = androidStepCount.toString()
         } else if (event.sensor.type == Sensor.TYPE_LINEAR_ACCELERATION) {
             val norm: Float = ExtraFunctions.calcNorm(
-                event.values[0] +
-                        event.values[1] +
+                event.values[0],
+                        event.values[1],
                         event.values[2]
             )
 
