@@ -1,6 +1,8 @@
 package com.example.fypdeadreckoning.activity
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.content.pm.PackageManager
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -13,6 +15,8 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.example.fypdeadreckoning.R
 import com.example.fypdeadreckoning.helpers.extra.ExtraFunctions
 import com.example.fypdeadreckoning.helpers.steps.DynamicStepCounter
@@ -29,6 +33,7 @@ import kotlin.text.format
 
 class StrideLengthCalibrationActivity : AppCompatActivity(), SensorEventListener, OnPreferredStepCounterListener {
     private var TAG = "StrideLengthActivity"
+    private val PERMISSION_REQUEST_CODE = 101
 
     private var textAndroidSteps: TextView? = null
     private var inputDistance: EditText? = null
@@ -42,7 +47,7 @@ class StrideLengthCalibrationActivity : AppCompatActivity(), SensorEventListener
     private var androidStepCounter: Sensor? = null
     private var sensorManager: SensorManager? = null
 
-    private var dynamicStepCounters: Array<DynamicStepCounter> = Array(15) { DynamicStepCounter() }
+    private var dynamicStepCounters: Array<DynamicStepCounter> = Array(25) { DynamicStepCounter() }
 
     // Step counter variables
     private var androidStepCount = 0
@@ -58,10 +63,10 @@ class StrideLengthCalibrationActivity : AppCompatActivity(), SensorEventListener
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_stride_calibration)
 
-        var sensitivity = 2.00
+        var sensitivity = 0.5
         for (i in dynamicStepCounters.indices) {
             dynamicStepCounters[i] = DynamicStepCounter(sensitivity)
-            sensitivity += 0.05
+            sensitivity += 0.1
         }
 
         //defining views
@@ -80,22 +85,11 @@ class StrideLengthCalibrationActivity : AppCompatActivity(), SensorEventListener
 
         //activate sensors when start button is pressed
         buttonStartCalibration!!.setOnClickListener {
-            sensorManager!!.registerListener(
-                this@StrideLengthCalibrationActivity,
-                linearAcceleration,
-                SensorManager.SENSOR_DELAY_FASTEST
-            )
-            sensorManager!!.registerListener(
-                this@StrideLengthCalibrationActivity,
-                androidStepCounter,
-                SensorManager.SENSOR_DELAY_FASTEST
-            )
-
-            buttonStartCalibration!!.isEnabled = false
-            buttonSetStrideLength!!.isEnabled = false
-            buttonStopCalibration!!.isEnabled = true
-
-            wasRunning = true
+            if (checkActivityRecognitionPermission()) {
+                startSensorListeners()
+            } else {
+                requestActivityRecognitionPermission()
+            }
         }
 
         //deactivate sensors when stop button is pressed and open step_counters dialog
@@ -143,11 +137,11 @@ class StrideLengthCalibrationActivity : AppCompatActivity(), SensorEventListener
                 Toast.LENGTH_SHORT
             ).show()
 
-            // Returns the stride_length and preferred_step_counter info to the calling activity
+            // Returns the stride_length and step_counter_sensitivity info to the calling activity
             val myIntent = intent
             myIntent.putExtra("stride_length", strideLength)
             myIntent.putExtra(
-                "preferred_step_counter",
+                "step_counter_sensitivity",
                 dynamicStepCounters[preferredStepCounterIndex].sensitivity
             )
             setResult(RESULT_OK, myIntent)
@@ -207,6 +201,56 @@ class StrideLengthCalibrationActivity : AppCompatActivity(), SensorEventListener
             textLinearAcceleration!!.text = if (linearAcceleration.length <= 5) linearAcceleration else linearAcceleration.substring(0, 5)
 
             for (dynamicStepCounter in dynamicStepCounters) dynamicStepCounter.findStep(norm)
+        }
+    }
+
+    private fun startSensorListeners() {
+        sensorManager!!.registerListener(
+            this@StrideLengthCalibrationActivity,
+            linearAcceleration,
+            SensorManager.SENSOR_DELAY_FASTEST
+        )
+        sensorManager!!.registerListener(
+            this@StrideLengthCalibrationActivity,
+            androidStepCounter,
+            SensorManager.SENSOR_DELAY_FASTEST
+        )
+
+        buttonStartCalibration!!.isEnabled = false
+        buttonSetStrideLength!!.isEnabled = false
+        buttonStopCalibration!!.isEnabled = true
+
+        wasRunning = true
+    }
+
+    // Check if activity tracking permission is granted
+    private fun checkActivityRecognitionPermission(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACTIVITY_RECOGNITION
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    // Request activity tracking permission
+    private fun requestActivityRecognitionPermission() {
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(Manifest.permission.ACTIVITY_RECOGNITION),
+            PERMISSION_REQUEST_CODE
+        )
+    }
+
+    // Handle the result of the activity permission request
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out kotlin.String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, start the sensors
+                startSensorListeners()
+            } else {
+                // Permission denied
+                Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

@@ -26,17 +26,20 @@ class SetUpActivity: AppCompatActivity() {
     private var gyroButton: Button? = null
     private var beginButton: Button? = null
 
+    private val defaultStrideLength = 0.75
+    private val defaultSensitivity = 2.5
+
     private val strideLengthLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == RESULT_OK) {
             result.data?.let { data ->
-                val strideLength = data.getDoubleExtra("stride_length", 0.75) // average stride length for a person
-                val preferredSensitivity = data.getDoubleExtra("preferred_sensitivity", 2.5) // best sensitivity in my testing
+                val strideLength = data.getDoubleExtra("stride_length", defaultStrideLength) // average stride length for a person
+                val stepCounterSensitivity = data.getDoubleExtra("step_counter_sensitivity", defaultSensitivity) // best sensitivity in my testing
 
                 Log.d(TAG, "Stride length: $strideLength")
-                Log.d(TAG, "Preferred step sensitivity: $preferredSensitivity")
+                Log.d(TAG, "Preferred step sensitivity: $stepCounterSensitivity")
 
-                saveStepCalibration(strideLength, preferredSensitivity)
+                saveStepCalibration(strideLength, stepCounterSensitivity)
             }
         }
     }

@@ -18,8 +18,8 @@ import com.example.fypdeadreckoning.R
 import com.example.fypdeadreckoning.helpers.steps.DynamicStepCounter
 import com.example.fypdeadreckoning.helpers.extra.ExtraFunctions
 
-class StepCountActivity : Activity(), SensorEventListener {
-
+class StepCountTestActivity : Activity(), SensorEventListener {
+    private val TAG = "StepCountTestActivity"
     private val PERMISSION_REQUEST_CODE = 101
 
     // Buttons
@@ -40,7 +40,6 @@ class StepCountActivity : Activity(), SensorEventListener {
     // Sensors
     private var sensorAccelerometer: Sensor? = null
     private var sensorLinearAcceleration: Sensor? = null
-    private var sensorStepDetector: Sensor? = null
     private var sensorStepCounter: Sensor? = null
     private var sensorManager: SensorManager? = null
 
@@ -75,7 +74,6 @@ class StepCountActivity : Activity(), SensorEventListener {
         sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
         sensorAccelerometer = sensorManager!!.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
         sensorLinearAcceleration = sensorManager!!.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION)
-        sensorStepDetector = sensorManager!!.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR)
         sensorStepCounter = sensorManager!!.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)
 
         // Set array of dynamic step counters with various sensitivity
@@ -100,9 +98,9 @@ class StepCountActivity : Activity(), SensorEventListener {
 
         // Deactivates the sensors
         stopButton!!.setOnClickListener {
-            sensorManager!!.unregisterListener(this@StepCountActivity, sensorAccelerometer)
-            sensorManager!!.unregisterListener(this@StepCountActivity, sensorLinearAcceleration)
-            sensorManager!!.unregisterListener(this@StepCountActivity, sensorStepDetector)
+            sensorManager!!.unregisterListener(this@StepCountTestActivity, sensorAccelerometer)
+            sensorManager!!.unregisterListener(this@StepCountTestActivity, sensorLinearAcceleration)
+            sensorManager!!.unregisterListener(this@StepCountTestActivity, sensorStepCounter)
 
             startButton!!.isEnabled = true
             stopButton!!.isEnabled = false
@@ -116,7 +114,7 @@ class StepCountActivity : Activity(), SensorEventListener {
 
     // Necessary for Kotlin, but not used
     override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
-        // TODO Not yet implemented
+        // Not yet implemented
     }
 
     // This only works as long as the sensor is registered
@@ -168,13 +166,13 @@ class StepCountActivity : Activity(), SensorEventListener {
 
         if (wasRunning) {
             sensorManager!!.registerListener(
-                this@StepCountActivity,
+                this@StepCountTestActivity,
                 sensorAccelerometer,
                 SensorManager.SENSOR_DELAY_FASTEST
             )
             sensorManager!!.registerListener(
-                this@StepCountActivity,
-                sensorStepDetector,
+                this@StepCountTestActivity,
+                sensorStepCounter,
                 SensorManager.SENSOR_DELAY_FASTEST
             )
 
@@ -233,22 +231,22 @@ class StepCountActivity : Activity(), SensorEventListener {
     // Registers listeners on start
     private fun startSensorListeners() {
         sensorManager!!.registerListener(
-            this@StepCountActivity,
+            this@StepCountTestActivity,
             sensorAccelerometer,
             SensorManager.SENSOR_DELAY_FASTEST
         )
         sensorManager!!.registerListener(
-            this@StepCountActivity,
+            this@StepCountTestActivity,
             sensorLinearAcceleration,
             SensorManager.SENSOR_DELAY_FASTEST
         )
         sensorManager!!.registerListener(
-            this@StepCountActivity,
-            sensorStepDetector,
+            this@StepCountTestActivity,
+            sensorStepCounter,
             SensorManager.SENSOR_DELAY_FASTEST
         )
         sensorManager!!.registerListener(
-            this@StepCountActivity,
+            this@StepCountTestActivity,
             sensorStepCounter,
             SensorManager.SENSOR_DELAY_FASTEST
         )

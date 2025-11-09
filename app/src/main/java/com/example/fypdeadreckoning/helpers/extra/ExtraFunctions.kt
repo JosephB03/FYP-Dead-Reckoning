@@ -1,6 +1,10 @@
 package com.example.fypdeadreckoning.helpers.extra
 
 import org.ejml.data.DMatrixRMaj
+import kotlin.math.asin
+import kotlin.math.atan2
+import kotlin.math.cos
+import kotlin.math.sin
 import kotlin.math.sqrt
 
 // Holds functions to be reused across app
@@ -131,5 +135,69 @@ object ExtraFunctions {
         if (compassDirection > Math.PI) compassDirection = (compassDirection % Math.PI) + -Math.PI
 
         return compassDirection.toFloat()
+    }
+
+    // Convert compass direction into bearing
+    fun compassToBearing(compassHeading: Float): Float {
+        // Convert from -π to π range to 0 to 2π range
+        var bearing = if (compassHeading < 0) {
+            compassHeading + (2.0 * Math.PI).toFloat()
+        } else {
+            compassHeading
+        }
+
+        // Ensure it's in valid range [0, 2π)
+        bearing = bearing % (2.0 * Math.PI).toFloat()
+
+        return bearing
+    }
+
+    // Find new location given lat, lon, distance, and bearing
+    // Takes in degrees and metres
+    fun bearingToLocation(currentLatitude: Double, currentLongitude: Double, distanceTravelled: Double, bearing: Float): LatLon {
+        val phi1 = Math.toRadians(currentLatitude)      // in radians
+        val lambda1 = Math.toRadians(currentLongitude)     // in radians
+        val d = distanceTravelled       // in metres
+        val r = 6371000.0               // Earth radius in metres
+
+        val bearingRad = Math.toRadians(bearing.toDouble())
+
+        val phi2 = asin(
+            sin(phi1) * cos(d / r) +
+                    cos(phi1) * sin(d / r) * cos(bearing)
+        )
+
+        val lambda2 = lambda1 + atan2(
+            sin(bearing) * sin(d / r) * cos(phi1),
+            cos(d / r) - sin(phi1) * sin(phi2)
+        )
+
+        // Convert back to degrees if needed for display
+        val newLatDegrees = Math.toDegrees(phi2)
+        val newLonDegrees = Math.toDegrees(lambda2)
+
+        return LatLon(newLatDegrees, newLonDegrees)
+    }
+
+    // Finds distance between two points on Earth
+    // Takes in degrees
+    fun haversine(lat1: Double, lon1: Double, lat2: Double, lon2: Double,): Double {
+        val r = 6371e3 // Earth radius in metres
+
+        // Convert to radians
+        val phi1 = Math.toRadians(lat1)
+        val phi2 = Math.toRadians(lat2)
+        val deltaPhi = Math.toRadians(lat2 - lat1)
+        val deltaLambda = Math.toRadians(lon2 - lon1)
+
+        val a = sin(deltaPhi / 2) * sin(deltaPhi / 2) +
+                cos(phi1) * cos(phi2) *
+                sin(deltaLambda / 2) * sin(deltaLambda / 2)
+
+        val c = 2 * atan2(sqrt(a), sqrt(1 - a))
+
+        val output = r * c
+
+        return output // Distance in metres
     }
 }

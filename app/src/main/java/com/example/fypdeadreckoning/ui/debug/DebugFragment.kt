@@ -8,8 +8,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.fypdeadreckoning.activity.DirectionActivity
-import com.example.fypdeadreckoning.activity.StepCountActivity
+import com.example.fypdeadreckoning.activity.DirectionTestActivity
+import com.example.fypdeadreckoning.activity.MovementTestActivity
+import com.example.fypdeadreckoning.activity.StepCountTestActivity
 import com.example.fypdeadreckoning.activity.StrideLengthCalibrationActivity
 import com.example.fypdeadreckoning.databinding.FragmentDebugBinding
 
@@ -43,17 +44,21 @@ class DebugFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.stepDebugButton.setOnClickListener {
-            val intent = Intent(requireContext(), StepCountActivity::class.java)
+            val intent = Intent(requireContext(), StepCountTestActivity::class.java)
             startActivity(intent)
         }
 
         binding.directionDebugButton.setOnClickListener {
-            val intent = Intent(requireContext(), DirectionActivity::class.java)
+            val intent = Intent(requireContext(), DirectionTestActivity::class.java)
             startActivity(intent)
         }
 
         binding.strideDebugButton.setOnClickListener {
             val intent = Intent(requireContext(), StrideLengthCalibrationActivity::class.java)
+            startActivity(intent)
+        }
+        binding.movementDebugButton.setOnClickListener {
+            val intent = Intent(requireContext(), MovementTestActivity::class.java)
             startActivity(intent)
         }
     }
